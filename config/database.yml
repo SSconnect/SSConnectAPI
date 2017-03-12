@@ -24,7 +24,9 @@ production:
   <<: *default
   database: ssconnect
   adapter: mysql2
-  encoding: utf8
+  encoding: utf8mb4
+  charset: utf8mb4
   host: mysql
   port: 3306
+  collation: utf8mb4_general_ci
   url: <%= ENV['RAILS_DATABASE_URL'] %>
