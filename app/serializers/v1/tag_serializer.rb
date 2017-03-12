@@ -1,6 +1,9 @@
 module V1
   class TagSerializer < ActiveModel::Serializer
-    attributes :id, :name, :taggings_count
-    has_one :story, serealizer: StorySerializer
+    attributes :id, :name, :count
+
+    def count
+      object.taggings_count
+    end
   end
 end
