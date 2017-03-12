@@ -8,6 +8,8 @@ namespace :crawl do
       feed.entries.each do |entry|
         # SKIP 登録済み
         next if Article.where(url: entry.url).exists?
+        # HACK: SKIP 絵文字入り
+        next if entry.title.each_char.select { |c| c.bytes.count >= 4 }.length > 0
         story = Story.find_or_create_by(title: entry.title)
         story.articles.create(
             url: entry.url,
@@ -17,7 +19,7 @@ namespace :crawl do
         if story.last_posted_at.nil?
           story.last_posted_at = entry.last_modified
         else
-          story.last_posted_at = [story.last_posted_at,entry.last_modified].max
+          story.last_posted_at = [story.last_posted_at, entry.last_modified].max
         end
         story.save
         print(story.last_posted_at)
