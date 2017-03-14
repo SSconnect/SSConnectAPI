@@ -1,5 +1,6 @@
 class Swing < ApplicationRecord
-  validates :wrong,:correct, presence: true, uniqueness: true
+  validates :wrong, presence: true, uniqueness: true
+  validates :correct, presence: true
   after_create do
     stories = Story.tagged_with(self.wrong)
     stories.all.each do |story|
