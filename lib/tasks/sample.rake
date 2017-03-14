@@ -8,6 +8,15 @@ namespace :sample do
     p "#{Blog.count} Blog Created."
   end
 
+  task :swing_insert => :environment do
+    Swing.create(:wrong => 'シンデレシンデレラガールズ',:correct=> 'デレマス')
+    Swing.create(:wrong => 'モバマス',:correct=> 'デレマス')
+    Swing.create(:wrong => 'アイドルマスター',:correct=> 'アイマス')
+    Swing.create(:wrong => '艦隊これくしょん～艦これ～',:correct=> '艦これ')
+    Swing.create(:wrong => '男女など',:correct=> '男・女')
+    p "#{Swing.count} Swing Created."
+  end
+
   task :faker_insert => :environment do
     10.times do |i|
       blog = Blog.create(
@@ -29,5 +38,18 @@ namespace :sample do
   task :user_insert => :environment do
     AdminUser.create!(email: 'sample@cps.im.dendai.ac.jp', password: 'password', password_confirmation: 'password')
   end
+  #
+  # task :test_a => :environment do
+  #   p 'aaaaaa'
+  # end
+  #
+  # task test_b => :environment do
+  #   p 'bbbbbb'
+  # end
+  #
+  # task :test => :environment do
+  #   p 'rails sample:test_a'
+  #   p 'rails sample:test_b'
+  # end
 
 end
