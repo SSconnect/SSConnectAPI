@@ -1,3 +1,6 @@
 class Swing < ApplicationRecord
-  validates :wrong, presence: true
+  validates :wrong,:correct, presence: true, uniqueness: true
+  after_create do
+
+  end
 end
