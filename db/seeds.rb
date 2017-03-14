@@ -13,6 +13,7 @@ stories = []
   (1..5).to_a.sample.times do
     story.tag_list << FFaker::Food.fruit
   end
+  story.save
   stories << story
 end
 
