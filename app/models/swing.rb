@@ -1,3 +1,3 @@
 class Swing < ApplicationRecord
-  validates :title, presence: true
+  validates :wrong, presence: true
 end
