@@ -10,8 +10,6 @@ end
 gem 'rails', '~> 5.0.1'
 # Use sqlite3 as the database for Active Record
 
-# Use Puma as the app server
-# gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
 # gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -35,13 +33,14 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'factory_girl_rails'
+gem 'faker'
+gem 'ffaker'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'factory_girl_rails'
   gem 'pry-rails'
-  gem 'faker'
-  gem 'ffaker'
   gem 'rspec-rails'
   gem 'sqlite3'
 end
@@ -59,6 +58,7 @@ end
 
 group :production do
   gem 'mysql2'
+  gem 'puma', '~> 3.0'
 end
 
 gem 'dotenv-rails'
