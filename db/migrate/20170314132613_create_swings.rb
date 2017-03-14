@@ -5,6 +5,6 @@ class CreateSwings < ActiveRecord::Migration[5.0]
       t.string :correct
       t.timestamps
     end
-    add_index :wrong, :unique => true
+    add_index :swings,:wrong, :unique => true
   end
 end

@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20170314132613) do
     t.string   "correct"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["wrong"], name: "index_swings_on_wrong", unique: true
   end
 
   create_table "taggings", force: :cascade do |t|
