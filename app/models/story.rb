@@ -12,4 +12,9 @@ class Story < ApplicationRecord
   validates :title, presence: true
   has_many :articles
   acts_as_taggable
+
+  def regist_tag(tag)
+    self.tag_list << Swing.trans(tag)
+    self.save
+  end
 end
