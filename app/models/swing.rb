@@ -3,11 +3,11 @@ class Swing < ApplicationRecord
   validates :correct, presence: true
 
   def self.lib
-    @lib ||= Swing.all.map { |x| [x.wrong, x.correct] }.to_h
+    @@lib ||= Swing.all.map { |x| [x.wrong, x.correct] }.to_h
   end
 
-  def trans(tag)
-    @lib[tag]
+  def self.trans(tag)
+    lib[tag] || tag
   end
 
   after_create do

@@ -20,7 +20,7 @@ class Article < ApplicationRecord
     story.regist_tag(tag)
     story.articles.create(
         url: url,
-        posted_at: entry.last_modified,
+        posted_at: posted_at,
         blog: blog
     )
   end
