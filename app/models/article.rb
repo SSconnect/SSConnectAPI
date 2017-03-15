@@ -24,4 +24,12 @@ class Article < ApplicationRecord
         blog: blog
     )
   end
+  after_create do
+    p self.story.last_posted_at
+    p self.posted_at
+    if story.last_posted_at.nil? ||self.story.last_posted_at > self.posted_at
+      self.story.last_posted_at = self.posted_at
+    end
+    story.save
+  end
 end
