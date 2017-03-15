@@ -21,3 +21,6 @@ doc/
 .idea
 .secret
 .env
+
+
+/lib/tasks/collection.rake
