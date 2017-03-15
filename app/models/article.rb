@@ -14,4 +14,14 @@
 class Article < ApplicationRecord
   belongs_to :blog, :foreign_key => :blog_id
   belongs_to :story, :foreign_key => :story_id
+
+  def self.create_with_story(url, posted_at, blog, title, tag)
+    story = Story.find_or_create_by(title: title)
+    story.regist_tag(tag)
+    story.articles.create(
+        url: url,
+        posted_at: entry.last_modified,
+        blog: blog
+    )
+  end
 end

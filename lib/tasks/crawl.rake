@@ -4,7 +4,6 @@ namespace :crawl do
       # SKIP selector 未設置
       next if blog.selector.nil?
       puts blog.title
-      swing_lib = Swing.all.map { |x| [ x.wrong, x.correct ] }.to_h
       feed = Feedjira::Feed.fetch_and_parse(blog.rss)
       feed.entries.each do |entry|
         # SKIP 登録済み
@@ -27,13 +26,8 @@ namespace :crawl do
 
         doc = Nokogiri::HTML(open(entry.url))
         next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr
-        tag = doc.css(blog.selector)[0].text
-        tag_list = tag.split.first
-        unless swing_lib[tag_list].nil?
-          tag_list = swing_lib[tag_list]
-        end
-        story.tag_list << tag_list
-        story.save
+        tag = doc.css(blog.selector)[0].text.split.first
+        story.regist_tag(tag)
         p story.tag_list.join(', ')
       end
 
