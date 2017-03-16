@@ -52,5 +52,12 @@ FactoryGirl.define do
       rss 'http://blog.livedoor.jp/mode_ss/index.rdf'
       selector '.title_table tr:nth-of-type(3) .time'
     end
+
+    factory :blog_yryr do
+      title 'ゆるゆりSS速報'
+      url 'http://blog.livedoor.jp/kakusika767'
+      rss ''
+      selector ''
+    end
   end
 end

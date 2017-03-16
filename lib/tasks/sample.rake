@@ -5,6 +5,7 @@ namespace :sample do
     FactoryGirl.create(:blog_ayamevip)
     FactoryGirl.create(:blog_elephant)
     FactoryGirl.create(:blog_mode_ss)
+    FactoryGirl.create(:blog_yryr)
     p "#{Blog.count} Blog Created."
   end
 
