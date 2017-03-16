@@ -1,8 +1,8 @@
 namespace :crawl do
   task :rss => :environment do
     Blog.all.each do |blog|
-      # SKIP selector 未設置
-      next if blog.selector.nil?
+      # rss未設置
+      next if blog.rss.nil?
       puts blog.title
       feed = Feedjira::Feed.fetch_and_parse(blog.rss)
       feed.entries.each do |entry|
