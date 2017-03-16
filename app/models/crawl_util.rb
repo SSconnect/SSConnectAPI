@@ -1,5 +1,5 @@
 class CrawlUtil
-  def self.run(blog, url_base, selector_articles, selector_title, selector_link, selector_tag, selector_ts, ts_format)
+  def self.run(blog, url_base, get_articles, get_title, get_link, get_tag, get_ts, ts_format)
 
     counter = Article.count
 
@@ -8,16 +8,16 @@ class CrawlUtil
 
       doc = Nokogiri::HTML(open(url))
       sleep(2)
-      articles = doc.css(selector_articles)
+      articles = get_articles.call(doc)
 
       break if articles.count == 0 # finish
 
-      articles.each do |article|
-        url = article.css(selector_link).attr('href').value
-        title = article.css(selector_title).text
-        posted_at_complex = article.css(selector_ts).text
+      articles.each do |a|
+        url = get_link.call(a)
+        title = get_title.call(a)
+        posted_at_complex = get_ts.call(a)
         posted_at = Time.strptime(posted_at_complex, ts_format)
-        tag = article.css(selector_tag).text
+        tag = get_tag.call(a)
 
         next unless Article.find_by_url(url).nil? # skip duplicate
 
