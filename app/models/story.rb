@@ -14,7 +14,7 @@ class Story < ApplicationRecord
   acts_as_taggable
 
   def regist_tag(tag)
-    self.tag_list << Swing.trans(tag)
+    self.tag_list << Swing.trans(tag.split.first)
     self.save
   end
 end
