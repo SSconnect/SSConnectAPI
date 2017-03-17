@@ -13,8 +13,11 @@ class Story < ApplicationRecord
   has_many :articles
   acts_as_taggable
 
-  def regist_tag(tag)
-    self.tag_list << Swing.trans(tag.tr(' SS',''))
+  def regist_tag(tags)
+    unless tags.kind_of?(Array)
+      tags = [tags]
+    end
+    self.tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
     self.save
   end
 end
