@@ -26,7 +26,11 @@ namespace :crawl do
 
         doc = Nokogiri::HTML(open(entry.url))
         next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr
-        story.regist_tag(doc.css(blog.selector)[0].text)
+        if blog.id == 3
+          story.regist_tag(doc.css('dd a').map(&:text))
+        else
+          story.regist_tag(doc.css(blog.selector)[0].text)
+        end
         p story.tag_list.join(', ')
       end
 
