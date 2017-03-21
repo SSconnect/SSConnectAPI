@@ -10,7 +10,11 @@ namespace :patch do
   task :fix_complex_tag => :environment do
     def addTag(wrong, corrects)
       stories = Story.tagged_with(wrong)
-      stories.each { |story| story.regist_tag(corrects) }
+      stories.each do |story|
+        story.regist_tag(corrects)
+        story.tag_list.remove(wrong)
+        story.save
+      end
       p "#{stories.count} stories #{wrong} => #{corrects.join(',')}"
     end
 
