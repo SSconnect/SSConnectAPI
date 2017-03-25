@@ -16,7 +16,7 @@ module V1
         stories = Story.where('title LIKE ?', "%#{q}%")
       end
 
-      unless params[:tag] == ''
+      unless params[:tag].nil?
         stories = stories.tagged_with(tag)
       end
 
