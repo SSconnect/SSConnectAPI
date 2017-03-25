@@ -1,8 +1,28 @@
 namespace :patch do
+
   task :change_posted_at => :environment do
     stories = Story.all
     stories.each do |story|
       story.last_posted_at = story.articles.map(&:posted_at).min
+      story.save
+    end
+  end
+
+  task :change_ayame_name => :environment do
+    articles = Blog.find(3).articles
+
+    articles.each do |article|
+      story_id = article.story_id
+      story = Story.find(story_id)
+      title = story.title
+      tags = story.tag_list
+      tags.each do |tag|
+        str = '」' + tag
+        if title.include?(str)
+          title.slice!(tag)
+        end
+      end
+      story.title = title
       story.save
     end
   end
