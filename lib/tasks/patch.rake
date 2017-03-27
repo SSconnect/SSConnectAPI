@@ -16,16 +16,26 @@ namespace :patch do
       story_id = article.story_id
       story = Story.find(story_id)
       title = story.title
-      tag = story.tag_list[0]
+      tags = story.tag_list
+      tag = tags[0]
       str = '」' + tag
+      str_second = '】' + tag
 
-      if title.include?(str)
+      if (title.include?(str)) ||(title.include?(str_second))
+        if title.include?(str)
+          word = str
+          symbol = '」'
+        end
+        if title.include?(str_second)
+          word = str_second
+          symbol = '】'
+        end
         url = article.url
         posted_at = article.posted_at
         p title
-        title = title.split(str).first
+        title = title.split(word).first
         p title
-        title += '」'
+        title += symbol
         p title
         Story.destroy(story_id)
         article.destroy
@@ -40,6 +50,7 @@ namespace :patch do
         else
           new_story.last_posted_at = [new_story.last_posted_at, article.posted_at].max
         end
+        new_story.regist_tag(tags)
         new_story.save
       end
     end
