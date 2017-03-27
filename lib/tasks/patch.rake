@@ -9,21 +9,39 @@ namespace :patch do
   end
 
   task :change_ayame_name => :environment do
-    articles = Blog.find(3).articles
+    blog = Blog.find(3)
+    articles = blog.articles
 
     articles.each do |article|
       story_id = article.story_id
       story = Story.find(story_id)
       title = story.title
-      tags = story.tag_list
-      tags.each do |tag|
-        str = '」' + tag
-        if title.include?(str)
-          title.slice!(tag)
+      tag = story.tag_list[0]
+      str = '」' + tag
+
+      if title.include?(str)
+        url = article.url
+        posted_at = article.posted_at
+        p title
+        title = title.split(str).first
+        p title
+        title += '」'
+        p title
+        Story.destroy(story_id)
+        article.destroy
+        new_story = Story.find_or_create_by(title: title)
+        new_story.articles.create(
+            url: url,
+            posted_at: posted_at,
+            blog: blog
+        )
+        if new_story.last_posted_at.nil?
+          new_story.last_posted_at = article.posted_at
+        else
+          new_story.last_posted_at = [new_story.last_posted_at, article.posted_at].max
         end
+        new_story.save
       end
-      story.title = title
-      story.save
     end
   end
 
