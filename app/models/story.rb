@@ -22,14 +22,9 @@ class Story < ApplicationRecord
   end
 
   def rename_title(title)
-    story = Story.find_by_title(title)
-    if story.nil?
-      self.title = title
-      save
-    else
-      story.articles += articles
-      story.regist_tag(tag_list)
-      destroy
-    end
+    story = Story.find_or_create_by(title: title)
+    story.articles += articles
+    story.regist_tag(tag_list)
+    destroy
   end
 end
