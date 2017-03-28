@@ -8,34 +8,43 @@ namespace :patch do
     end
   end
 
-  task :change_ayame_name => :environment do
-    blog = Blog.find(3)
-    articles = blog.articles
+  task :change_story_name => :environment do
+    articles = Article.all
 
     articles.each do |article|
       story_id = article.story_id
       story = Story.find(story_id)
       title = story.title
       tags = story.tag_list
+      next if tags.nil?
       tag = tags[0]
       str = '」' + tag
       str_second = '】' + tag
+      str_third = '【' + tag + '】'
 
-      if (title.include?(str)) ||(title.include?(str_second))
+      if (title.include?(str)) || (title.include?(str_second)) || (title.include?(str_third))
+        blog = Blog.find(article.blog_id)
+        url = article.url
+        posted_at = article.posted_at
+        p title
         if title.include?(str)
           word = str
           symbol = '」'
+          title = title.split(word).first
+          p title
+          title += symbol
         end
         if title.include?(str_second)
           word = str_second
           symbol = '】'
+          title = title.split(word).first
+          p title
+          title += symbol
         end
-        url = article.url
-        posted_at = article.posted_at
-        p title
-        title = title.split(word).first
-        p title
-        title += symbol
+        if title.include?(str_third)
+          p title
+          title.slice!(str_third)
+        end
         p title
         Story.destroy(story_id)
         article.destroy
