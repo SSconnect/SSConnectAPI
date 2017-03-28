@@ -8,7 +8,26 @@ namespace :patch do
     end
   end
 
-  task :change_story_name => :environment do
+  task :bracket_to_tag, [:word] => :environment do |_, args|
+    word = args.word
+    p args, word
+    word_bra = "【#{word}】"
+    Story.where("title like '%#{word_bra}%'").each do |story|
+      title = story.title.gsub word_bra, ''
+      story.regist_tag(word)
+      story.rename_title(title)
+    end
+  end
+
+  task :print_brackets => :environment do
+    words = []
+    Story.where("title like '%【%'").each do |story|
+      words += story.title.scan /【.*?】/
+    end
+    p words.uniq
+  end
+
+  task :change_ayame_name => :environment do
     articles = Article.all
 
     articles.each do |article|

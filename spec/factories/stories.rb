@@ -17,8 +17,8 @@ FactoryGirl.define do
     title { "#{FFaker::NameJA.name}「あいうえお」#{FFaker::NameJA.name}「かきくけこ」" }
     factory :story_bracket do
       title {
-        say1 = "#{FFaker::NameJA.name}「あいうえお」"
-        say2 = "#{FFaker::NameJA.name}「かきくけこ」"
+        say1 = %w(AAA BBB CCC).sample + '「あいうえお」'
+        say2 = %w(AAA BBB CCC).sample + '「かきくけこ」'
         rand_brancket + say1 + rand_brancket + say2 + rand_brancket
       }
     end

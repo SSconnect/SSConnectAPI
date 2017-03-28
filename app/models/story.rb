@@ -17,7 +17,19 @@ class Story < ApplicationRecord
     unless tags.kind_of?(Array)
       tags = [tags]
     end
-    self.tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
-    self.save
+    tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
+    save
+  end
+
+  def rename_title(title)
+    story = Story.find_by_title(title)
+    if story.nil?
+      self.title = title
+      save
+    else
+      story.articles += articles
+      story.regist_tag(tag_list)
+      destroy
+    end
   end
 end
