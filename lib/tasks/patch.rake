@@ -32,20 +32,16 @@ namespace :patch do
 
     articles.each do |article|
       story = article.story
-      next if story.nil?
-      title = story.title
+      next if story.nil? || story.tag_list.empty?
+
       tags = story.tag_list
-      next if story.tag_list.empty?
-
       pattern = /#{tags.first}[^」]*$/
-      new_title = title.gsub(pattern, '').gsub "【#{tags.first}】", ''
-      next if title == new_title
+      new_title = story.title.gsub(pattern, '').gsub "【#{tags.first}】", ''
+      next if story.title == new_title
 
-      p title
       new_story = Story.find_or_create_by(title: new_title)
-      article.story.destroy
-      new_story.articles << article
-      new_story.save
+      story.destroy
+      article.update(story: new_story)
 
       if new_story.last_posted_at.nil?
         new_story.last_posted_at = article.posted_at

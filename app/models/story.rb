@@ -10,7 +10,7 @@
 
 class Story < ApplicationRecord
   validates :title, presence: true
-  has_many :articles
+  has_many :articles, :dependent => :delete_all
   acts_as_taggable
 
   def regist_tag(tags)
