@@ -21,6 +21,7 @@ class Story < ApplicationRecord
     save
   end
 
+  # 新しい title の Story の作成または既存の Story へ Merge する
   def rename_title(title)
     story = Story.find_or_create_by(title: title)
     story.articles += articles
