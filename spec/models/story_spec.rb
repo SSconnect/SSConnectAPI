@@ -49,7 +49,7 @@ describe Story do
     it '実行後正しいデータが残っている' do
       @story.rename_title 'titleB'
 
-      expect(Story.exists? @story).to be_falsey
+      expect(Story.exists? @story.id).to be_falsey
       expect(Story.last.articles).to contain_exactly @a1, @a2
       expect(Story.last.tag_list).to contain_exactly *@tags
     end
@@ -63,7 +63,7 @@ describe Story do
 
       @story.rename_title 'titleB'
 
-      expect(Story.exists? @story).to be_falsey
+      expect(Story.exists? @story.id).to be_falsey
       expect(Story.find(story.id).articles).to contain_exactly a1, a2, @a1, @a2
       expect(Story.find(story.id).tag_list).to contain_exactly *((tags + @tags).uniq)
     end
