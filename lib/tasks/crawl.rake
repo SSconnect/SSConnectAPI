@@ -11,26 +11,18 @@ namespace :crawl do
         # HACK: SKIP 絵文字入り
         next if entry.title.each_char.select { |c| c.bytes.count >= 4 }.length > 0
         story = Story.find_or_create_by(title: entry.title)
-        story.articles.create(
-            url: entry.url,
-            posted_at: entry.first_posted_at,
-            blog: blog
+        story.articles.create(url: entry.url,
+                              posted_at: entry.first_posted_at,
+                              blog: blog
         )
-        if story.first_posted_at.nil?
-          story.first_posted_at = entry.first_posted_at
-        else
-          story.first_posted_at = [story.first_posted_at, entry.first_posted_at].max
-        end
-        story.save
-        print(story.first_posted_at)
 
         doc = Nokogiri::HTML(open(entry.url))
         next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr
         if blog.id == 3
-          story.regist_tag(doc.css('dd a').map(&:text))
-        else
-          story.regist_tag(doc.css(blog.selector)[0].text)
+          tags = doc.css('dd a').map(&:text)
         end
+        tags ||= doc.css(blog.selector)[0].text
+        story.regist_tag(tags)
         p story.tag_list.join(', ')
       end
 

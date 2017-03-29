@@ -29,4 +29,17 @@ class Story < ApplicationRecord
     story.regist_tag(tag_list)
     destroy
   end
+
+  # 【このすば】のようなキーワードを取り除く
+  def bracket_check
+    tag_words = bracket_words.filter { |word| Swing.lib.includes word }
+    tags = tag_words.map { |word| Swing.trans(word) }
+    regist_tag(tags)
+    pattern = tag_words.map { |word| "【#{word}】" }.join('|')
+    rename_title title.gsub(pattern, '')
+  end
+
+  def bracket_words
+    (title.scan /【(.*?)】/).flatten
+  end
 end
