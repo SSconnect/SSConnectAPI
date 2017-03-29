@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: stories
+#
+#  id              :integer          not null, primary key
+#  title           :string
+#  first_posted_at :datetime
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#
+
 require 'rails_helper'
 
 describe Story do

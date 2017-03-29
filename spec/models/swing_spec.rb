@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: swings
+#
+#  id         :integer          not null, primary key
+#  wrong      :string
+#  correct    :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 require 'rails_helper'
 
 describe Swing do

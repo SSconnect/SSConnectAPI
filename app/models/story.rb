@@ -2,10 +2,11 @@
 #
 # Table name: stories
 #
-#  id         :integer          not null, primary key
-#  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :integer          not null, primary key
+#  title           :string
+#  first_posted_at :datetime
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #
 
 class Story < ApplicationRecord
