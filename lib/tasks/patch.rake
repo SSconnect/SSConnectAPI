@@ -8,60 +8,48 @@ namespace :patch do
     end
   end
 
-  task :change_story_name => :environment do
+  task :bracket_to_tag, [:word] => :environment do |_, args|
+    word = args.word
+    p args, word
+    word_bra = "【#{word}】"
+    Story.where("title like '%#{word_bra}%'").each do |story|
+      title = story.title.gsub word_bra, ''
+      story.regist_tag(word)
+      story.rename_title(title)
+    end
+  end
+
+  task :print_brackets => :environment do
+    words = []
+    Story.where("title like '%【%'").each do |story|
+      words += story.title.scan /【.*?】/
+    end
+    p words.uniq
+  end
+
+  task :fix_story_title => :environment do
     articles = Article.all
 
     articles.each do |article|
-      story_id = article.story_id
-      story = Story.find(story_id)
-      title = story.title
-      tags = story.tag_list
-      next if tags.nil?
-      tag = tags[0]
-      str = '」' + tag
-      str_second = '】' + tag
-      str_third = '【' + tag + '】'
+      story = article.story
+      next if story.nil? || story.tag_list.empty?
 
-      if (title.include?(str)) || (title.include?(str_second)) || (title.include?(str_third))
-        blog = Blog.find(article.blog_id)
-        url = article.url
-        posted_at = article.posted_at
-        p title
-        if title.include?(str)
-          word = str
-          symbol = '」'
-          title = title.split(word).first
-          p title
-          title += symbol
-        end
-        if title.include?(str_second)
-          word = str_second
-          symbol = '】'
-          title = title.split(word).first
-          p title
-          title += symbol
-        end
-        if title.include?(str_third)
-          p title
-          title.slice!(str_third)
-        end
-        p title
-        Story.destroy(story_id)
-        article.destroy
-        new_story = Story.find_or_create_by(title: title)
-        new_story.articles.create(
-            url: url,
-            posted_at: posted_at,
-            blog: blog
-        )
-        if new_story.last_posted_at.nil?
-          new_story.last_posted_at = article.posted_at
-        else
-          new_story.last_posted_at = [new_story.last_posted_at, article.posted_at].max
-        end
-        new_story.regist_tag(tags)
-        new_story.save
+      tags = story.tag_list
+      pattern = /#{tags.first}[^」]*$/
+      new_title = story.title.gsub(pattern, '').gsub "【#{tags.first}】", ''
+      next if story.title == new_title
+
+      new_story = Story.find_or_create_by(title: new_title)
+      story.destroy
+      article.update(story: new_story)
+
+      if new_story.last_posted_at.nil?
+        new_story.last_posted_at = article.posted_at
+      else
+        new_story.last_posted_at = [new_story.last_posted_at, article.posted_at].max
       end
+      new_story.regist_tag(tags)
+      new_story.save
     end
   end
 

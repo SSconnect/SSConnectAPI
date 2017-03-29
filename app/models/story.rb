@@ -10,14 +10,21 @@
 
 class Story < ApplicationRecord
   validates :title, presence: true
-  has_many :articles
+  has_many :articles, :dependent => :delete_all
   acts_as_taggable
 
   def regist_tag(tags)
     unless tags.kind_of?(Array)
       tags = [tags]
     end
-    self.tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
-    self.save
+    tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
+    save
+  end
+
+  def rename_title(title)
+    story = Story.find_or_create_by(title: title)
+    story.articles += articles
+    story.regist_tag(tag_list)
+    destroy
   end
 end
