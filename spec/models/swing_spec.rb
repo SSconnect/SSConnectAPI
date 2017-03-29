@@ -10,5 +10,6 @@ describe Swing do
     story = create(:story)
     story.regist_tag(%w(AAA BBB))
     Swing.create(wrong: 'AAA', correct: 'CCC')
+    expect(Story.last.tag_list).to contain_exactly 'BBB', 'CCC'
   end
 end
