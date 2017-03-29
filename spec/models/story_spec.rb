@@ -37,22 +37,35 @@ describe Story do
     expect(Story.last.first_posted_at).to eq first.posted_at
   end
 
-  it 'rename_title rename 後正しいデータが残っている' do
-    story = create(:story, :title => 'titleA')
-    tags = %w(tagA tagB tagC)
-    story.regist_tag(tags)
-    a1 = create(:article, :story => story, :blog => create(:blog))
-    a2 = create(:article, :story => story, :blog => create(:blog))
+  describe '#rename_title' do
+    before do
+      @story = create(:story, :title => 'titleA')
+      @tags = %w(tagA tagB tagC)
+      @story.regist_tag(@tags)
+      @a1 = create(:article, :story => @story)
+      @a2 = create(:article, :story => @story)
+    end
 
-    story.rename_title 'titleB'
+    it '実行後正しいデータが残っている' do
+      @story.rename_title 'titleB'
 
-    expect(Story.exists? story).to be_falsey
-    expect(Story.last.articles).to contain_exactly a1, a2
-    expect(Story.last.tag_list).to contain_exactly *tags
+      expect(Story.exists? @story).to be_falsey
+      expect(Story.last.articles).to contain_exactly @a1, @a2
+      expect(Story.last.tag_list).to contain_exactly *@tags
+    end
+
+    it 'new_title が被っていた場合' do
+      story = create(:story, :title => 'titleB')
+      tags = %w(tagC tagD tagE)
+      story.regist_tag(tags)
+      a1 = create(:article, :story => story, :blog => create(:blog))
+      a2 = create(:article, :story => story, :blog => create(:blog))
+
+      @story.rename_title 'titleB'
+
+      expect(Story.exists? @story).to be_falsey
+      expect(Story.find(story.id).articles).to contain_exactly a1, a2, @a1, @a2
+      expect(Story.find(story.id).tag_list).to contain_exactly *((tags + @tags).uniq)
+    end
   end
-
-  it 'rename_title new_title が被っていた場合のチェック' do
-
-  end
-
 end
