@@ -86,4 +86,20 @@ describe Story do
       expect(Story.find(story.id).tag_list).to contain_exactly *((tags + @tags).uniq)
     end
   end
+
+  describe '#bracket_words' do
+    it 'works' do
+      words = %w(tag1 tag2)
+      story = create(:story, :title => "hoge【#{words[0]}】fuga【#{words[1]}】")
+      expect(story.bracket_words).to contain_exactly *words
+    end
+  end
+
+  describe '#bracket_words' do
+    it 'works' do
+      words = %w(tag1 tag2)
+      story = create(:story, :title => "hoge【#{words[0]}】fuga【#{words[1]}】")
+      expect(story.bracket_words).to contain_exactly *words
+    end
+  end
 end
