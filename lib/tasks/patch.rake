@@ -3,7 +3,7 @@ namespace :patch do
   task :change_posted_at => :environment do
     stories = Story.all
     stories.each do |story|
-      story.last_posted_at = story.articles.map(&:posted_at).min
+      story.first_posted_at = story.articles.map(&:posted_at).min
       story.save
     end
   end
@@ -16,6 +16,14 @@ namespace :patch do
       title = story.title.gsub word_bra, ''
       story.regist_tag(word)
       story.rename_title(title)
+    end
+  end
+
+  desc "Patch ミスにより生成された '【' で終わるものを消す"
+  task :fix_last_bracket => :environment do
+    Story.where("title like '%【'").each do |story|
+      # 末尾削除
+      story.rename_title story.title[0...-1]
     end
   end
 
@@ -43,11 +51,6 @@ namespace :patch do
       story.destroy
       article.update(story: new_story)
 
-      if new_story.last_posted_at.nil?
-        new_story.last_posted_at = article.posted_at
-      else
-        new_story.last_posted_at = [new_story.last_posted_at, article.posted_at].max
-      end
       new_story.regist_tag(tags)
       new_story.save
     end

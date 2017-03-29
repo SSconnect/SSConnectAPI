@@ -6,6 +6,10 @@ class Swing < ApplicationRecord
     @@lib ||= Swing.all.map { |x| [x.wrong, x.correct] }.to_h
   end
 
+  def self.lib_drop
+    @@lib = nil
+  end
+
   def self.trans(tag)
     lib[tag] || tag
   end
@@ -18,5 +22,9 @@ class Swing < ApplicationRecord
       story.save
     end
 
+  end
+
+  after_save do
+    Swing.lib_drop
   end
 end

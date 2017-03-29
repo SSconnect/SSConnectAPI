@@ -25,10 +25,10 @@ class Article < ApplicationRecord
     )
   end
 
-  after_create do
-    if story.last_posted_at.nil? ||self.story.last_posted_at > self.posted_at
-      self.story.last_posted_at = self.posted_at
+  after_save do
+    if story.first_posted_at.nil? || story.first_posted_at > posted_at
+      story.first_posted_at = posted_at
+      story.save
     end
-    story.save
   end
 end
