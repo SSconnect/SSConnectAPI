@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170314132613) do
+ActiveRecord::Schema.define(version: 20170329123354) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -66,10 +66,10 @@ ActiveRecord::Schema.define(version: 20170314132613) do
 
   create_table "stories", force: :cascade do |t|
     t.string   "title"
-    t.datetime "last_posted_at"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.index ["last_posted_at"], name: "index_stories_on_last_posted_at"
+    t.datetime "first_posted_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["first_posted_at"], name: "index_stories_on_first_posted_at"
     t.index ["title"], name: "index_stories_on_title"
   end
 

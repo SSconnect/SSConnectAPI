@@ -13,16 +13,16 @@ namespace :crawl do
         story = Story.find_or_create_by(title: entry.title)
         story.articles.create(
             url: entry.url,
-            posted_at: entry.last_modified,
+            posted_at: entry.first_posted_at,
             blog: blog
         )
-        if story.last_posted_at.nil?
-          story.last_posted_at = entry.last_modified
+        if story.first_posted_at.nil?
+          story.first_posted_at = entry.first_posted_at
         else
-          story.last_posted_at = [story.last_posted_at, entry.last_modified].max
+          story.first_posted_at = [story.first_posted_at, entry.first_posted_at].max
         end
         story.save
-        print(story.last_posted_at)
+        print(story.first_posted_at)
 
         doc = Nokogiri::HTML(open(entry.url))
         next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr

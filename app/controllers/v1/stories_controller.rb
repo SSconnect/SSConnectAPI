@@ -20,7 +20,7 @@ module V1
         stories = stories.tagged_with(tag)
       end
 
-      res = stories.includes(articles: [:blog]).order('last_posted_at DESC').page(page)
+      res = stories.includes(articles: [:blog]).order('first_posted_at DESC').page(page)
       render json: res, include: [{articles: [:blog]}], each_serializer: V1::StorySerializer
     end
 

@@ -26,8 +26,8 @@ class Article < ApplicationRecord
   end
 
   after_save do
-    if story.last_posted_at.nil? || story.last_posted_at > posted_at
-      story.last_posted_at = posted_at
+    if story.first_posted_at.nil? || story.first_posted_at > posted_at
+      story.first_posted_at = posted_at
       story.save
     end
   end
