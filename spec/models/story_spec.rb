@@ -23,4 +23,18 @@ describe Story do
 
     expect(Story.last.tag_list).to contain_exactly *%w(tagA tagB tagC tagD)
   end
+
+  it 'articles が更新されたら last_posted_at が更新される' do
+    story = create(:story)
+
+    second = create(:article, :story => story, :posted_at => 1.days.ago.to_s)
+    expect(Story.last.last_posted_at.usec).to eq second.posted_at.usec
+
+    last = create(:article, :story => story, :posted_at => Time.now.to_s)
+    expect(Story.last.last_posted_at).to eq second.posted_at
+
+    first = create(:article, :story => story, :posted_at => 2.days.ago.to_s)
+    expect(Story.last.last_posted_at).to eq first.posted_at
+  end
+
 end

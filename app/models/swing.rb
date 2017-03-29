@@ -15,7 +15,6 @@ class Swing < ApplicationRecord
   end
 
   after_create do
-    Swing.lib_drop
     stories = Story.tagged_with(self.wrong)
     stories.all.each do |story|
       story.tag_list.remove(self.wrong)
@@ -23,5 +22,9 @@ class Swing < ApplicationRecord
       story.save
     end
 
+  end
+
+  after_save do
+    Swing.lib_drop
   end
 end
