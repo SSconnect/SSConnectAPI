@@ -37,4 +37,22 @@ describe Story do
     expect(Story.last.first_posted_at).to eq first.posted_at
   end
 
+  it 'rename_title rename 後正しいデータが残っている' do
+    story = create(:story, :title => 'titleA')
+    tags = %w(tagA tagB tagC)
+    story.regist_tag(tags)
+    a1 = create(:article, :story => story, :blog => create(:blog))
+    a2 = create(:article, :story => story, :blog => create(:blog))
+
+    story.rename_title 'titleB'
+
+    expect(Story.exists? story).to be_falsey
+    expect(Story.last.articles).to contain_exactly a1, a2
+    expect(Story.last.tag_list).to contain_exactly *tags
+  end
+
+  it 'rename_title new_title が被っていた場合のチェック' do
+
+  end
+
 end
