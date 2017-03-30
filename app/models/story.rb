@@ -50,4 +50,13 @@ class Story < ApplicationRecord
   def bracket_words
     (title.scan /【(.*?)】/).flatten
   end
+
+  def self.remove_bracket_all(tag)
+    word_bra = "【#{tag}】"
+    Story.where("title like '%#{word_bra}%'").each do |story|
+      title = story.title.gsub word_bra, ''
+      story.regist_tag(tag)
+      story.rename_title(title)
+    end
+  end
 end

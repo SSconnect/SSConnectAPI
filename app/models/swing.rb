@@ -32,7 +32,8 @@ class Swing < ApplicationRecord
       story.tag_list.add(self.correct)
       story.save
     end
-
+    Story.remove_bracket_all(self.wrong)
+    Story.remove_bracket_all(self.correct)
   end
 
   after_save do
