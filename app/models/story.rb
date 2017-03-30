@@ -34,7 +34,8 @@ class Story < ApplicationRecord
   end
 
   after_save do
-    bracket_check
+    that = bracket_check
+    that.end_tag_check
   end
 
   # 【このすば】のようなキーワードを取り除く
@@ -46,10 +47,20 @@ class Story < ApplicationRecord
     tag_words = bracket_words.select { |word| !ActsAsTaggableOn::Tag.find_by_name(word).nil? }
     tags += tag_words
 
-    return if tags.empty?
+    return self if tags.empty?
     regist_tag(tags, true)
     pattern = (swing_words + tag_words).map { |word| "【#{word}】" }.join('|')
     rename_title title.gsub(/#{pattern}/, '')
+  end
+
+  def end_tag_check
+    that = self
+    tag_list.each do |tag|
+      new_title = that.title.gsub /#{tag}$/, ''
+      next if new_title == that.title
+      that = that.rename_title(new_title)
+    end
+    that
   end
 
   def bracket_words
