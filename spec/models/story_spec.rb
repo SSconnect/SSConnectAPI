@@ -126,4 +126,13 @@ describe Story do
       expect(Story.last.tag_list).to contain_exactly 'AAA', 'CCC'
     end
   end
+
+  describe '#end_tag_check' do
+    it 'works' do
+      story = create(:story, :title => 'hoge「abcdefg」fuga「abcdefg」tag1')
+      story.regist_tag('tag1')
+      expect(Story.last.title).to eq('hoge「abcdefg」fuga「abcdefg」')
+    end
+
+  end
 end

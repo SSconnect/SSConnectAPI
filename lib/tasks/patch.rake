@@ -41,6 +41,12 @@ namespace :patch do
     end
   end
 
+  task :fix_last_tag => :environment do
+    Story.where("title not like '%」'").each do |story|
+      story.end_tag_check
+    end
+  end
+
   task :fix_story_title => :environment do
     articles = Article.all
 
