@@ -7,18 +7,10 @@ module V1
     def index
       page = (params[:page] || 1).to_i
       q = params[:q] || ''
-      # tagのt
       tag = params[:tag] || ''
 
-      if q == ''
-        stories = Story.all
-      else
-        stories = Story.where('title LIKE ?', "%#{q}%")
-      end
-
-      unless params[:tag].nil?
-        stories = stories.tagged_with(tag)
-      end
+      stories = q == '' ? Story.all : Story.where('title LIKE ?', "%#{q}%")
+      stories = stories.tagged_with(tag) if tag != ''
 
       res = stories.includes(articles: [:blog]).order('first_posted_at DESC').page(page)
       render json: res, include: [{articles: [:blog]}], each_serializer: V1::StorySerializer
