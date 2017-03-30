@@ -21,8 +21,18 @@ class Swing < ApplicationRecord
     @@lib = nil
   end
 
-  def self.trans(tag)
+  def self.libTrans(tag)
     lib[tag] || tag
+  end
+
+  def self.trans(tag)
+    swing = Swing.find_by_wrong(tag)
+    return tag if swing.nil?
+    swing.correct
+  end
+
+  def self.include? tag
+    trans(tag) != tag
   end
 
   after_create do
@@ -34,9 +44,5 @@ class Swing < ApplicationRecord
     end
     Story.remove_bracket_all(self.wrong)
     Story.remove_bracket_all(self.correct)
-  end
-
-  after_save do
-    Swing.lib_drop
   end
 end

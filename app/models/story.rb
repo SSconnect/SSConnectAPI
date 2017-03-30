@@ -39,7 +39,7 @@ class Story < ApplicationRecord
   # 【このすば】のようなキーワードを取り除く
   def bracket_check
     # Swing check
-    swing_words = bracket_words.select { |word| Swing.lib.include? word }
+    swing_words = bracket_words.select { |word| Swing.include? word }
     tags = swing_words.map { |word| Swing.trans(word) }
     # Tag check
     tag_words = bracket_words.select { |word| !ActsAsTaggableOn::Tag.find_by_name(word).nil? }

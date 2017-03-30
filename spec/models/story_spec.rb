@@ -97,37 +97,33 @@ describe Story do
 
   describe '#bracket_check' do
     before do
-      @title = "hoge【AAA】fuga【BBB】"
+      ActsAsTaggableOn::Tag.create(name: 'AAA')
+      Swing.create({wrong: 'BBB', correct: 'CCC'})
     end
 
     it 'ヒットなし' do
-      story = create(:story, :title => @title)
-      expect(Story.last.title).to eq(@title)
+      title = 'hoge【DDD】fuga【EEE】'
+      story = create(:story, :title => title)
+      expect(Story.last.title).to eq(title)
       expect(Story.last).to eq(story)
     end
 
     it 'Swing にヒット' do
-      swing = Swing.create({wrong: 'AAA', correct: 'tag'})
-      create(:story, :title => @title)
-      expect(Story.last.title).to eq("hogefuga【BBB】")
-      expect(Story.last.tag_list).to eq([swing.correct])
-      Swing.lib_drop
+      create(:story, :title => 'hoge【BBB】fuga【EEE】')
+      expect(Story.last.title).to eq('hogefuga【EEE】')
+      expect(Story.last.tag_list).to eq(['CCC'])
     end
 
     it 'Tag にヒット' do
-      ActsAsTaggableOn::Tag.create(name: 'BBB')
-      create(:story, :title => @title)
-      expect(Story.last.title).to eq("hoge【AAA】fuga")
-      expect(Story.last.tag_list).to eq(['BBB'])
+      create(:story, :title => 'hoge【DDD】fuga【AAA】')
+      expect(Story.last.title).to eq('hoge【DDD】fuga')
+      expect(Story.last.tag_list).to eq(['AAA'])
     end
 
     it '複数ヒット' do
-      swing = Swing.create({wrong: 'BBB', correct: 'tag'})
-      ActsAsTaggableOn::Tag.create(name: 'AAA')
-      create(:story, :title => @title)
-      expect(Story.last.title).to eq("hogefuga")
-      expect(Story.last.tag_list).to contain_exactly 'AAA', swing.correct
-      Swing.lib_drop
+      create(:story, :title => 'hoge【BBB】fuga【CCC】piyo【AAA】foo【CCC】')
+      expect(Story.last.title).to eq('hogefugapiyofoo')
+      expect(Story.last.tag_list).to contain_exactly 'AAA', 'CCC'
     end
   end
 end
