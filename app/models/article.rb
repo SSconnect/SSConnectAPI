@@ -23,6 +23,7 @@ class Article < ApplicationRecord
         posted_at: posted_at,
         blog: blog
     )
+    story.bracket_check
   end
 
   after_save do
