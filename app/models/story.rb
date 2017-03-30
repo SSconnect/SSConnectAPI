@@ -14,13 +14,13 @@ class Story < ApplicationRecord
   has_many :articles, :dependent => :delete_all
   acts_as_taggable
 
-  def regist_tag(tags)
+  def regist_tag(tags, without_save=false)
     return if tags.empty?
     unless tags.kind_of?(Array)
       tags = [tags]
     end
     tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
-    save
+    save unless without_save
   end
 
   # 新しい title の Story の作成または既存の Story へ Merge する
@@ -30,6 +30,10 @@ class Story < ApplicationRecord
     story.articles += articles
     story.regist_tag(tag_list)
     destroy
+  end
+
+  after_save do
+    bracket_check
   end
 
   # 【このすば】のようなキーワードを取り除く
@@ -42,7 +46,7 @@ class Story < ApplicationRecord
     tags += tag_words
 
     return if tags.empty?
-    regist_tag(tags)
+    regist_tag(tags, true)
     pattern = (swing_words + tag_words).map { |word| "【#{word}】" }.join('|')
     rename_title title.gsub(/#{pattern}/, '')
   end
@@ -59,4 +63,5 @@ class Story < ApplicationRecord
       story.rename_title(title)
     end
   end
+
 end
