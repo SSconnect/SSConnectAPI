@@ -43,13 +43,7 @@ namespace :patch do
 
   task :fix_last_tag => :environment do
     Story.where("title not like '%」'").each do |story|
-      story.tag_list.each do |tag|
-        new_title = story.title.gsub /#{tag}$/, ''
-        if new_title == story.title
-          next
-        end
-        story = story.rename_title(new_title)
-      end
+      story.end_tag_check
     end
   end
 
