@@ -105,27 +105,33 @@ describe Story do
     it 'ヒットなし' do
       @story.bracket_check
       expect(Story.last.title).to eq(@title)
-      expect(Story.last).to @story
+      expect(Story.last).to eq(@story)
     end
 
     it 'Swing にヒット' do
-      swing = Swing.regist(@words[0], 'tag')
+      swing = Swing.create({wrong: @words[0], correct: 'tag'})
       @story.bracket_check
       expect(Story.last.title).to eq("hogefuga【#{@words[1]}】")
       expect(Story.last.tag_list).to eq([swing.correct])
+      Swing.lib_drop
     end
 
     it 'Tag にヒット' do
       create(:story).regist_tag(@words[1])
-      expect(Story.find(@story.id).title).to eq("hoge【#{@words[0]}】fuga")
-      expect(Story.find(@story.id).tag_list).to eq([@words[1]])
+      Story.last.destroy
+      @story.bracket_check
+      expect(Story.last.title).to eq("hoge【#{@words[0]}】fuga")
+      expect(Story.last.tag_list).to eq([@words[1]])
     end
 
     it '複数ヒット' do
-      swing = Swing.regist(@words[1], 'tag')
+      swing = Swing.create({wrong: @words[1], correct: 'tag'})
       create(:story).regist_tag(@words[0])
-      expect(Story.find(@story.id).title).to eq("hogefuga")
-      expect(Story.find(@story.id).tag_list).to eq([@words[0], swing.correct])
+      Story.last.destroy
+      @story.bracket_check
+      expect(Story.last.title).to eq("hogefuga")
+      expect(Story.last.tag_list).to contain_exactly @words[0], swing.correct
+      Swing.lib_drop
     end
   end
 end
