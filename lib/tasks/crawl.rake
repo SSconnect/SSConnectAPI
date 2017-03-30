@@ -23,7 +23,7 @@ namespace :crawl do
         end
         tags ||= doc.css(blog.selector)[0].text
         story.regist_tag(tags)
-        p story.tag_list.join(', ')
+        story.bracket_check
       end
 
     end

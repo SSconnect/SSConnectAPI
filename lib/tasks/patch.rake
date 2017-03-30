@@ -35,6 +35,12 @@ namespace :patch do
     p words.uniq
   end
 
+  task :fix_story_title2 => :environment do
+    Story.where("title like '%【%'").each do |story|
+      story.bracket_check
+    end
+  end
+
   task :fix_story_title => :environment do
     articles = Article.all
 
