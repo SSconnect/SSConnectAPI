@@ -30,6 +30,7 @@ class Story < ApplicationRecord
     story.articles += articles
     story.regist_tag(tag_list)
     destroy
+    return story
   end
 
   after_save do
