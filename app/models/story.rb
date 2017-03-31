@@ -19,7 +19,7 @@ class Story < ApplicationRecord
     unless tags.kind_of?(Array)
       tags = [tags]
     end
-    tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
+    self.tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
     save unless without_save
   end
 
