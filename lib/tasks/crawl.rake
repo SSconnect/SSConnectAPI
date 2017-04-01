@@ -12,10 +12,9 @@ namespace :crawl do
         next if entry.title.each_char.select { |c| c.bytes.count >= 4 }.length > 0
         story = Story.find_or_create_by(title: entry.title)
         story.articles.create(url: entry.url,
-                              posted_at: entry.first_posted_at,
+                              posted_at: entry.last_modified,
                               blog: blog
         )
-
         doc = Nokogiri::HTML(open(entry.url))
         next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr
         if blog.id == 3
