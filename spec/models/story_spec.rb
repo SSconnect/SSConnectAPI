@@ -16,9 +16,8 @@ describe Story do
 
     it 'タグの登録ができる' do
       story = create(:story)
-      story.regist_tag('tagA')
-      story.regist_tag('tagB')
-
+      story.regist_tag(['tagA'])
+      story.regist_tag(['tagB'])
       expect(Story.last.tag_list).to contain_exactly 'tagA', 'tagB'
     end
 
@@ -92,46 +91,6 @@ describe Story do
       words = %w(tag1 tag2)
       story = create(:story, :title => "hoge【#{words[0]}】fuga【#{words[1]}】")
       expect(story.bracket_words).to contain_exactly *words
-    end
-  end
-
-  describe '#bracket_check' do
-    before do
-      ActsAsTaggableOn::Tag.create(name: 'AAA')
-      Swing.create({wrong: 'BBB', correct: 'CCC'})
-    end
-
-    it 'ヒットなし' do
-      title = 'hoge【DDD】fuga【EEE】'
-      story = create(:story, :title => title)
-      expect(Story.last.title).to eq(title)
-      expect(Story.last).to eq(story)
-    end
-
-    it 'Swing にヒット' do
-      create(:story, :title => 'hoge【BBB】fuga【EEE】')
-      expect(Story.last.title).to eq('hogefuga【EEE】')
-      expect(Story.last.tag_list).to eq(['CCC'])
-    end
-
-    it 'Tag にヒット' do
-      create(:story, :title => 'hoge【DDD】fuga【AAA】')
-      expect(Story.last.title).to eq('hoge【DDD】fuga')
-      expect(Story.last.tag_list).to eq(['AAA'])
-    end
-
-    it '複数ヒット' do
-      create(:story, :title => 'hoge【BBB】fuga【CCC】piyo【AAA】foo【CCC】')
-      expect(Story.last.title).to eq('hogefugapiyofoo')
-      expect(Story.last.tag_list).to contain_exactly 'AAA', 'CCC'
-    end
-  end
-
-  describe '#end_tag_check' do
-    it 'works' do
-      story = create(:story, :title => 'hoge「abcdefg」fuga「abcdefg」tag1')
-      story.regist_tag('tag1')
-      expect(Story.last.title).to eq('hoge「abcdefg」fuga「abcdefg」')
     end
   end
 

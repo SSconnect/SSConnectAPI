@@ -16,16 +16,12 @@ namespace :crawl do
           tags = doc.css('dd a').map(&:text)
         end
         tags ||= [doc.css(blog.selector)[0].text]
-
         story = Story.regist_story(entry.title,tags)
         story.articles.create(url: entry.url,
                               posted_at: entry.last_modified,
                               blog: blog
         )
-        story.regist_tag(tags)
-        story.bracket_check
       end
-
     end
   end
 end

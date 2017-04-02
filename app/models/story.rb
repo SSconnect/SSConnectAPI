@@ -15,14 +15,11 @@ class Story < ApplicationRecord
   acts_as_taggable
 
   def regist_tag(tags, without_save=false)
-    return if tags.empty?
-    unless tags.kind_of?(Array)
-      tags = [tags]
-    end
+    return self if tags.empty?
     self.tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
     save unless without_save
+    self
   end
-
 
   # 新しい title の Story の作成または既存の Story へ Merge する
   def rename_title(title)
@@ -34,36 +31,6 @@ class Story < ApplicationRecord
     return story
   end
 
-  after_save do
-    that = bracket_check
-    that.end_tag_check
-  end
-
-  # 【このすば】のようなキーワードを取り除く
-  def bracket_check
-    # Swing check
-    swing_words = bracket_words.select { |word| Swing.include? word }
-    tags = swing_words.map { |word| Swing.trans(word) }
-    # Tag check
-    tag_words = bracket_words.select { |word| !ActsAsTaggableOn::Tag.find_by_name(word).nil? }
-    tags += tag_words
-
-    return self if tags.empty?
-    regist_tag(tags, true)
-    pattern = (swing_words + tag_words).map { |word| "【#{word}】" }.join('|')
-    rename_title title.gsub(/#{pattern}/, '')
-  end
-
-  def end_tag_check
-    that = self
-    tag_list.each do |tag|
-      new_title = that.title.gsub /#{tag}$/, ''
-      next if new_title == that.title
-      that = that.rename_title(new_title)
-    end
-    that
-  end
-
   def bracket_words
     (title.scan /【(.*?)】/).flatten
   end
@@ -72,7 +39,7 @@ class Story < ApplicationRecord
     word_bra = "【#{tag}】"
     Story.where("title like '%#{word_bra}%'").each do |story|
       title = story.title.gsub word_bra, ''
-      story.regist_tag(tag)
+      story.regist_tag([tag])
       story.rename_title(title)
     end
   end
@@ -84,7 +51,7 @@ class Story < ApplicationRecord
   #
   def self.regist_story(title,tags)
     title = fix_title(title,tags)
-    find_or_create_by(title: title)
+    find_or_create_by(title: title).regist_tag(tags)
   end
 
   def self.fix_title(title, tags)

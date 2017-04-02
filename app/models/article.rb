@@ -16,14 +16,12 @@ class Article < ApplicationRecord
   belongs_to :story, :foreign_key => :story_id
 
   def self.create_with_story(url, posted_at, blog, title, tag)
-    story = Story.find_or_create_by(title: title)
-    story.regist_tag(tag)
+    story = Story.regist_story(title,tag)
     story.articles.create(
         url: url,
         posted_at: posted_at,
         blog: blog
     )
-    story.bracket_check
   end
 
   after_save do
