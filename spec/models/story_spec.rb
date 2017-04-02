@@ -12,6 +12,22 @@
 require 'rails_helper'
 
 describe Story do
+  describe '#regist_story' do
+    it 'タイトルが修正されているstory' do
+      Swing.create({wrong: 'BBB', correct: 'CCC'})
+      story = Story.regist_story('【tag1】test「」【BBB】test2「」【CCC】', %w(tag1 tag2))
+      expect(story.title).to eq ('test「」test2「」')
+    end
+
+    it 'storyが無駄に作られていない' do
+      Story.regist_story('aaa', %w(tag1 tag2))
+      Story.regist_story('bbb【tag1】', %w(tag1 tag2))
+      expect(Story.last.id).to eq(2)
+      Story.regist_story('【tag1】aaa', %w(tag1 tag2))
+      expect(Story.last.id).to eq(2)
+    end
+  end
+
   describe '#regist_tag' do
 
     it 'タグの登録ができる' do
