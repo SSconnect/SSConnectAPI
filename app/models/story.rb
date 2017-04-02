@@ -76,4 +76,22 @@ class Story < ApplicationRecord
     end
   end
 
+
+  #
+  # title: タイトル
+  # tags:  新規タグ
+  #
+  def self.fix_title(title, tags)
+    title = remove_bracket_filter(title, tags)
+    remove_suffix_filter(title, tags)
+  end
+
+  def self.remove_bracket_filter(title, tags)
+
+  end
+
+  def self.remove_suffix_filter(title, tags)
+
+  end
+
 end
