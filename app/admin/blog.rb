@@ -1,5 +1,6 @@
 ActiveAdmin.register Blog do
   permit_params :title, :url, :rss, :selector
+  actions :all, except: [:new, :destroy]
 
   index do
     selectable_column
