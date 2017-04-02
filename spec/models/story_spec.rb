@@ -133,6 +133,59 @@ describe Story do
       story.regist_tag('tag1')
       expect(Story.last.title).to eq('hoge「abcdefg」fuga「abcdefg」')
     end
+  end
 
+  describe '#remove_bracket_filter' do
+    before do
+      ActsAsTaggableOn::Tag.create(name: 'AAA')
+      Swing.create({wrong: 'BBB', correct: 'CCC'})
+    end
+
+    it 'ヒットなし' do
+      title = 'hoge【DDD】fuga【EEE】'
+      expect(Story.remove_bracket_filter(title, [])).to eq(title)
+    end
+
+    it 'Swing にヒット' do
+      title = 'hoge【BBB】fuga【EEE】'
+      expect(Story.remove_bracket_filter(title, [])).to eq('hogefuga【EEE】')
+    end
+
+    it 'Tag にヒット' do
+      title = 'hoge【DDD】fuga【AAA】'
+      expect(Story.remove_bracket_filter(title, [])).to eq('hoge【DDD】fuga')
+    end
+
+    it '複数ヒット' do
+      title = 'hoge【BBB】fuga【CCC】piyo【AAA】foo【CCC】'
+      expect(Story.remove_bracket_filter(title, [])).to eq('hogefugapiyofoo')
+    end
+
+    it '新規 Tag にヒット' do
+      title = '【KKK】hoge【BBB】fuga【GGG】'
+      expect(Story.remove_bracket_filter(title, ['GGG', 'HHH'])).to eq('【KKK】hogefuga')
+    end
+  end
+
+  describe '#remove_suffix_filter' do
+    before do
+      ActsAsTaggableOn::Tag.create(name: 'AAA')
+      Swing.create({wrong: 'BBB', correct: 'CCC'})
+    end
+
+    it 'Swing' do
+      title = 'hoge「abcdefg」fuga「abcdefg」AAA'
+      expect(Story.remove_suffix_filter(title, [])).to eq('hoge「abcdefg」fuga「abcdefg」')
+    end
+
+    it 'Tag' do
+      title = 'hoge「abcdefg」fuga「abcdefg」BBB'
+      expect(Story.remove_suffix_filter(title, [])).to eq('hoge「abcdefg」fuga「abcdefg」')
+    end
+
+    it '新規 Tag' do
+      title = 'hoge「abcdefg」fuga「abcdefg」DDD'
+      expect(Story.remove_suffix_filter(title, ['DDD'])).to eq('hoge「abcdefg」fuga「abcdefg」')
+    end
   end
 end
