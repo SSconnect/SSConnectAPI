@@ -32,7 +32,7 @@ class Swing < ApplicationRecord
   end
 
   def self.include? tag
-    trans(tag) != tag
+    !(Swing.find_by_wrong(tag).nil? and Swing.find_by_correct(tag).nil?)
   end
 
   after_create do

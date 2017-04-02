@@ -23,6 +23,7 @@ class Story < ApplicationRecord
     save unless without_save
   end
 
+
   # 新しい title の Story の作成または既存の Story へ Merge する
   def rename_title(title)
     return if title == self.title
@@ -81,17 +82,26 @@ class Story < ApplicationRecord
   # title: タイトル
   # tags:  新規タグ
   #
+  def self.regist_story(title,tags)
+    title = fix_title(title,tags)
+    find_or_create_by(title: title)
+  end
+
   def self.fix_title(title, tags)
     title = remove_bracket_filter(title, tags)
-    remove_suffix_filter(title, tags)
+    title
   end
 
   def self.remove_bracket_filter(title, tags)
-
+    wrong_words = bracket_words_2(title).select { |word| Swing.include? word }
+    # Tag check
+    tag_words = bracket_words_2(title).select { |word| !ActsAsTaggableOn::Tag.find_by_name(word).nil? }
+    pattern = (wrong_words + tag_words + tags).map { |word| "【#{word}】" }.join('|')
+    title.gsub(/#{pattern}/, '')
   end
 
-  def self.remove_suffix_filter(title, tags)
-
+  def self.bracket_words_2(title)
+    (title.scan /【(.*?)】/).flatten
   end
 
 end
