@@ -10,17 +10,18 @@ namespace :crawl do
         next if Article.where(url: entry.url).exists?
         # HACK: SKIP 絵文字入り
         next if entry.title.each_char.select { |c| c.bytes.count >= 4 }.length > 0
-        story = Story.find_or_create_by(title: entry.title)
-        story.articles.create(url: entry.url,
-                              posted_at: entry.last_modified,
-                              blog: blog
-        )
         doc = Nokogiri::HTML(open(entry.url))
         next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr
         if blog.id == 3
           tags = doc.css('dd a').map(&:text)
         end
-        tags ||= doc.css(blog.selector)[0].text
+        tags ||= [doc.css(blog.selector)[0].text]
+
+        story = Story.regist_story(entry.title,tags)
+        story.articles.create(url: entry.url,
+                              posted_at: entry.last_modified,
+                              blog: blog
+        )
         story.regist_tag(tags)
         story.bracket_check
       end
