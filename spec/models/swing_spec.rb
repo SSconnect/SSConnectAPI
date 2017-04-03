@@ -22,7 +22,7 @@ describe Swing do
   describe '#after_create' do
     it '既存の Story タグも修正される' do
       story = create(:story)
-      story.regist_tag(%w(AAA BBB))
+      story.regist_tags(%w(AAA BBB))
       Swing.create(wrong: 'AAA', correct: 'CCC')
       expect(Story.last.tag_list).to contain_exactly 'BBB', 'CCC'
     end

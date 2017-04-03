@@ -28,26 +28,26 @@ describe Story do
     end
   end
 
-  describe '#regist_tag' do
+  describe '#regist_tags' do
 
     it 'タグの登録ができる' do
       story = create(:story)
-      story.regist_tag(['tagA'])
-      story.regist_tag(['tagB'])
+      story.regist_tags(['tagA'])
+      story.regist_tags(['tagB'])
       expect(Story.last.tag_list).to contain_exactly 'tagA', 'tagB'
     end
 
     it 'タグの複数登録ができる' do
       story = create(:story)
-      story.regist_tag(%w(tagA tagB tagC))
+      story.regist_tags(%w(tagA tagB tagC))
 
       expect(Story.last.tag_list).to contain_exactly *%w(tagA tagB tagC)
     end
 
     it '重複に対応している' do
       story = create(:story)
-      story.regist_tag(%w(tagA tagB tagC))
-      story.regist_tag(%w(tagC tagD))
+      story.regist_tags(%w(tagA tagB tagC))
+      story.regist_tags(%w(tagC tagD))
 
       expect(Story.last.tag_list).to contain_exactly *%w(tagA tagB tagC tagD)
     end
@@ -74,7 +74,7 @@ describe Story do
     before do
       @story = create(:story, :title => 'titleA')
       @tags = %w(tagA tagB tagC)
-      @story.regist_tag(@tags)
+      @story.regist_tags(@tags)
       @a1 = create(:article, :story => @story)
       @a2 = create(:article, :story => @story)
     end
@@ -90,7 +90,7 @@ describe Story do
     it 'new_title が被っていた場合' do
       story = create(:story, :title => 'titleB')
       tags = %w(tagC tagD tagE)
-      story.regist_tag(tags)
+      story.regist_tags(tags)
       a1 = create(:article, :story => story, :blog => create(:blog))
       a2 = create(:article, :story => story, :blog => create(:blog))
 

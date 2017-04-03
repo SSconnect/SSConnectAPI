@@ -5,7 +5,7 @@ describe 'GET /v1/stories' do
     before do
       30.times do |i|
         story = create(:story)
-        story.regist_tag(%w(tagA tagB))
+        story.regist_tags(%w(tagA tagB))
         create(:article, :story => story)
         create(:article, :story => story)
       end
@@ -27,17 +27,17 @@ describe 'GET /v1/stories' do
     before do
       # id: 1
       story1 = create(:story, :title => 'AAA「hoge」BBB「fuga」')
-      story1.regist_tag(%w(tagA tagB))
+      story1.regist_tags(%w(tagA tagB))
       create(:article, :story => story1, :posted_at => 3.days.ago.to_s)
 
       # id: 2
       story2 = create(:story, :title => 'AAA「hoge」CCC「fuga」')
-      story2.regist_tag(%w(tagA tagC))
+      story2.regist_tags(%w(tagA tagC))
       create(:article, :story => story2, :posted_at => 1.days.ago.to_s)
 
       # id: 3
       story3 = create(:story, :title => 'CCC「hoge」DDD「fuga」')
-      story3.regist_tag(%w(tagC tagD))
+      story3.regist_tags(%w(tagC tagD))
       create(:article, :story => story3, :posted_at => 5.days.ago.to_s)
     end
 

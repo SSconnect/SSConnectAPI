@@ -1,5 +1,5 @@
 class CrawlUtil
-  def self.run(blog, url_base, get_articles, get_title, get_link, get_tag, get_ts, ts_format)
+  def self.run(blog, url_base, get_articles, get_title, get_link, get_tags, get_ts, ts_format)
 
     counter = Article.count
 
@@ -17,11 +17,11 @@ class CrawlUtil
         title = get_title.call(a)
         posted_at_complex = get_ts.call(a)
         posted_at = Time.strptime(posted_at_complex, ts_format)
-        tag = get_tag.call(a)
+        tags = get_tags.call(a)
 
         next unless Article.find_by_url(url).nil? # skip duplicate
 
-        Article.create_with_story(url, posted_at, blog, title, tag)
+        Article.create_with_story(url, posted_at, blog, title, tags)
         counter += 1
       end
       p counter
