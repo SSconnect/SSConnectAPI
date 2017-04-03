@@ -10,12 +10,12 @@ namespace :sample do
   end
 
   task :swing_insert => :environment do
-    Swing.create(:wrong => 'シンデレシンデレラガールズ',:correct=> 'デレマス')
-    Swing.create(:wrong => 'モバマス',:correct=> 'デレマス')
-    Swing.create(:wrong => 'アイドルマスター',:correct=> 'アイマス')
-    Swing.create(:wrong => '艦隊これくしょん～艦これ～',:correct=> '艦これ')
-    Swing.create(:wrong => '男女など',:correct=> '男・女')
-    Swing.create(:wrong => 'ガールズ&パンツァー',:correct=> 'ガルパン')
+    Swing.create(:wrong => 'シンデレシンデレラガールズ', :correct => 'デレマス')
+    Swing.create(:wrong => 'モバマス', :correct => 'デレマス')
+    Swing.create(:wrong => 'アイドルマスター', :correct => 'アイマス')
+    Swing.create(:wrong => '艦隊これくしょん～艦これ～', :correct => '艦これ')
+    Swing.create(:wrong => '男女など', :correct => '男・女')
+    Swing.create(:wrong => 'ガールズ&パンツァー', :correct => 'ガルパン')
 
     p "#{Swing.count} Swing Created."
   end
@@ -40,6 +40,7 @@ namespace :sample do
 
   task :user_insert => :environment do
     AdminUser.create!(email: 'sample@cps.im.dendai.ac.jp', password: 'password', password_confirmation: 'password')
+    AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
   end
   #
   # task :test_a => :environment do
