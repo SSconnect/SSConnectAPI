@@ -14,10 +14,10 @@ class Story < ApplicationRecord
   has_many :articles, :dependent => :delete_all
   acts_as_taggable
 
-  def regist_tag(tags, without_save=false)
+  def regist_tags(tags)
     return self if tags.empty?
     self.tag_list = self.tag_list.concat(tags.map { |tag| Swing.trans(tag.tr('SS', '')) })
-    save unless without_save
+    save
     self
   end
 
@@ -26,9 +26,9 @@ class Story < ApplicationRecord
     return if title == self.title
     story = Story.find_or_create_by(title: title)
     story.articles += articles
-    story.regist_tag(tag_list)
+    story.regist_tags(tag_list)
     destroy
-    return story
+    story
   end
 
   def bracket_words
@@ -39,7 +39,7 @@ class Story < ApplicationRecord
     word_bra = "【#{tag}】"
     Story.where("title like '%#{word_bra}%'").each do |story|
       title = story.title.gsub word_bra, ''
-      story.regist_tag([tag])
+      story.regist_tags([tag])
       story.rename_title(title)
     end
   end
@@ -49,9 +49,9 @@ class Story < ApplicationRecord
   # title: タイトル
   # tags:  新規タグ
   #
-  def self.regist_story(title,tags)
-    title = fix_title(title,tags)
-    find_or_create_by(title: title).regist_tag(tags)
+  def self.regist_story(title, tags)
+    title = fix_title(title, tags)
+    find_or_create_by(title: title).regist_tags(tags)
   end
 
   def self.fix_title(title, tags)
