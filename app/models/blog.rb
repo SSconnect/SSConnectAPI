@@ -19,21 +19,20 @@ class Blog < ApplicationRecord
     return if rss.nil?
     feed = Feedjira::Feed.fetch_and_parse(blog.rss)
     feed.entries.each do |entry|
-      # SKIP 登録済み
-      next if Article.where(url: entry.url).exists?
-      # HACK: SKIP 絵文字入り
-      next if entry.title.has_emoji
-      doc = Nokogiri::HTML(open(entry.url))
-      next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr
-      if blog.id == 3
-        tags = doc.css('dd a').map(&:text)
-      end
-      tags ||= [doc.css(blog.selector)[0].text]
-      story = Story.regist_story(entry.title, tags)
-      story.articles.create(url: entry.url,
-                            posted_at: entry.last_modified,
-                            blog: blog
-      )
+      new_entry(entry)
     end
+  end
+
+  def new_entry(entry)
+    next if Article.where(url: entry.url).exists? # 登録済みチェック
+    next if entry.title.has_emoji # NOTE: 絵文字チェック
+    doc = Nokogiri::HTML(open(entry.url))
+    next if doc.css(blog.selector)[0].nil? # TODO: Notification Selector invalid Erorr
+
+    # あやめ速報のみ
+    tags = doc.css('dd a').map(&:text) if blog.id == 3
+    tags ||= [doc.css(blog.selector)[0].text]
+
+    Article.create_with_story_from_entry(self, entry, tags)
   end
 end
