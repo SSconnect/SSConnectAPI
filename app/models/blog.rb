@@ -16,8 +16,8 @@ class Blog < ApplicationRecord
 
   def fetch_rss
     # RSS 未登録はスキップ
-    return if rss.nil?
-    feed = Feedjira::Feed.fetch_and_parse(rss)
+    return if rss.nil? or rss.empty?
+    feed = Feedjira::Feed.fetch_and_parse(rss); 0
     feed.entries.each do |entry|
       new_entry(entry)
     end
