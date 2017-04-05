@@ -1,27 +1,38 @@
 module V1
-  class ArticlesController < ApplicationController
+  class ArticlesController < Grape::API
+    version 'v1', using: :path
+    format :json
+    prefix :api
+    resource :articles do
+      desc 'article all'
+      get do
+        p = (params[:page] || 1).to_i
 
-    # articles GET
-    # show_all_article
-    def index
-      p = (params[:page] || 1).to_i
+        if params[:blog_id].nil?
+          articles = Article.all
+        else
+          articles = Blog.find(params[:blog_id]).articles
+        end
 
-      if params[:blog_id].nil?
-        articles = Article.all
-      else
-        articles = Blog.find(params[:blog_id]).articles
+        unless params[:q].nil?
+          articles = articles.where('title LIKE ?', "%#{params[:q]}%")
+        end
+
+        unless params[:story_id].nil?
+          articles = Story.find(params[:story_id]).articles
+        end
+        res = articles.includes(:blog).order('posted_at DESC').page(p)
+        res
       end
-
-      unless params[:q].nil?
-        articles = articles.where('title LIKE ?', "%#{params[:q]}%")
+      desc 'article(id)'
+      params do
+        requires :id, type: Integer, desc: 'story id.'
       end
-
-      unless params[:story_id].nil?
-        articles = Story.find(params[:story_id]).articles
+      route_param :id do
+        get do
+          Article.find(params[:id])
+        end
       end
-
-      res = articles.includes(:blog).order('posted_at DESC').page(p)
-      render json: res, each_serializer: V1::ArticleSerializer
     end
   end
 end
