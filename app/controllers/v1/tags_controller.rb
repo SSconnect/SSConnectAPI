@@ -1,8 +1,22 @@
 module V1
-  class TagsController < ApplicationController
-    def index
-      tags = ActsAsTaggableOn::Tag.order('taggings_count DESC')
-      render json: tags, each_serializer: V1::TagSerializer
+  class TagsController < Grape::API
+    version 'v1', using: :path
+    format :json
+    prefix :api
+    resource :tags do
+      desc 'tag all'
+      get do
+        ActsAsTaggableOn::Tag.order('taggings_count DESC')
+      end
+      desc 'tag(id)'
+      params do
+        requires :id, type: Integer, desc: 'story id.'
+      end
+      route_param :id do
+        get do
+          ActsAsTaggableOn::Tag.all.find(params[:id])
+        end
+      end
     end
   end
 end

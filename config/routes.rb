@@ -11,5 +11,5 @@ Rails.application.routes.draw do
   # end
   mount V1::StoriesController  => '/'
   mount V1::ArticlesController  => '/'
-
+  mount V1::TagsController  => '/'
 end
