@@ -1,16 +1,6 @@
 module V1
   class BlogsController < Grape::API
-    # def index
-    #   blogs = Blog.all
-    #   render json:blogs, each_siliarizer:V1::BlogSerializer,root:nil
-    # end
-    # def show
-    #   render json:@blog, sirializer:V1::BlogSerializer, root:nil
-    # end
-    # private
-    # def set_entity
-    #   @blog = Blog.find(params[:id])
-    # end
+    content_type :json, 'application/json; charset=utf-8;'
     version 'v1', using: :path
     format :json
     prefix :api
