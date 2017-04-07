@@ -1,8 +1,5 @@
 module V1
   class StoriesController < Grape::API
-    content_type :json, 'application/json; charset=utf-8;'
-    version 'v1', using: :path
-    format :json
     resource :stories do
       desc 'GET /stories'
       params do

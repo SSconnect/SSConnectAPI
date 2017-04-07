@@ -1,8 +1,5 @@
 module V1
   class BlogsController < Grape::API
-    content_type :json, 'application/json; charset=utf-8;'
-    version 'v1', using: :path
-    format :json
     resource :blogs do
       desc 'GET /blogs'
       get do

@@ -9,8 +9,5 @@ Rails.application.routes.draw do
   #   resources :tags
   #   get '*path', controller: 'application', action: 'render_404'
   # end
-  mount V1::StoriesController  => '/'
-  mount V1::ArticlesController  => '/'
-  mount V1::BlogsController  => '/'
-  mount V1::TagsController  => '/'
+  mount V1::Root  => '/'
 end
