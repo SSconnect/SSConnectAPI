@@ -3,7 +3,6 @@ module V1
     content_type :json, 'application/json; charset=utf-8;'
     version 'v1', using: :path
     format :json
-    prefix :api
     resource :tags do
       desc 'tag all'
       get do
