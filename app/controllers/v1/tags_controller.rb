@@ -4,11 +4,11 @@ module V1
     version 'v1', using: :path
     format :json
     resource :tags do
-      desc 'tag all'
+      desc 'GET /tags'
       get do
         ActsAsTaggableOn::Tag.order('taggings_count DESC')
       end
-      desc 'tag(id)'
+      desc 'GET /tags/:id'
       params do
         requires :id, type: Integer, desc: 'story id.'
       end

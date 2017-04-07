@@ -4,7 +4,7 @@ module V1
     version 'v1', using: :path
     format :json
     resource :articles do
-      desc 'article all'
+      desc 'GET /articles'
       params do
         optional :page, type: Integer, default: 1
         optional :blog_id, type: Integer
@@ -23,7 +23,7 @@ module V1
         res = articles.includes(:blog).order('posted_at DESC').page(params[:page])
         res
       end
-      desc 'article(id)'
+      desc 'GET /articles/:id'
       params do
         requires :id, type: Integer, desc: 'story id.'
       end

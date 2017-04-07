@@ -4,12 +4,12 @@ module V1
     version 'v1', using: :path
     format :json
     resource :blogs do
-      desc 'blog all'
+      desc 'GET /blogs'
       get do
         Blog.all
       end
 
-      desc 'blog(id)'
+      desc 'GET /blogs/:id'
       params do
         requires :id, type: Integer, desc: 'story id.'
       end

@@ -4,7 +4,7 @@ module V1
     version 'v1', using: :path
     format :json
     resource :stories do
-      desc 'story all'
+      desc 'GET /stories'
       params do
         optional :page, type: Integer, default: 1
         optional :q, type: String, default: ''
@@ -17,7 +17,7 @@ module V1
         res
       end
       
-      desc 'story(id)'
+      desc 'GET /stories/:id'
       params do
         requires :id, type: Integer, desc: 'story id.'
       end
