@@ -5,14 +5,15 @@ module V1
     format :json
     resource :stories do
       desc 'story all'
+      params do
+        optional :page, type: Integer, default: 1
+        optional :q, type: String, default: ''
+        optional :tag, type: String, default: ''
+      end
       get do
-        page = (params[:page] || 1).to_i
-        q = params[:q] || ''
-        tag = params[:tag] || ''
-        stories = q == '' ? Story.all : Story.where('title LIKE ?', "%#{q}%")
-        stories = stories.tagged_with(tag) if tag != ''
-
-        res = stories.includes(articles: [:blog]).order('first_posted_at DESC').page(page)
+        stories = params[:q] == '' ? Story.all : Story.where('title LIKE ?', "%#{params[:q]}%")
+        stories = stories.tagged_with(params[:tag]) if params[:tag] != ''
+        res = stories.includes(articles: [:blog]).order('first_posted_at DESC').page(params[:page])
         res
       end
       

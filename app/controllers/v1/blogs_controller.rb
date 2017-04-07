@@ -16,7 +16,6 @@ module V1
       route_param :id do
         get do
          @blog = Blog.find(params[:id])
-         @blog
         end
       end
     end

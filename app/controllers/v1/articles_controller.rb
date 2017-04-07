@@ -5,23 +5,22 @@ module V1
     format :json
     resource :articles do
       desc 'article all'
+      params do
+        optional :page, type: Integer, default: 1
+        optional :blog_id, type: Integer
+        optional :story_id, type: Integer
+      end
       get do
-        p = (params[:page] || 1).to_i
-
         if params[:blog_id].nil?
           articles = Article.all
         else
           articles = Blog.find(params[:blog_id]).articles
         end
 
-        unless params[:q].nil?
-          articles = articles.where('title LIKE ?', "%#{params[:q]}%")
-        end
-
         unless params[:story_id].nil?
           articles = Story.find(params[:story_id]).articles
         end
-        res = articles.includes(:blog).order('posted_at DESC').page(p)
+        res = articles.includes(:blog).order('posted_at DESC').page(params[:page])
         res
       end
       desc 'article(id)'
