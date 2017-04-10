@@ -14,7 +14,7 @@ class Bracket < ApplicationRecord
     stories.each do |story|
       title = story.title
       tags = story.tag_list
-      new_title = Story.fix_title(title,tags)
+      new_title = Story.space_delete(Story.fix_title(title,tags))
       story.rename_title(new_title)
     end
   end

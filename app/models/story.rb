@@ -55,7 +55,7 @@ class Story < ApplicationRecord
   end
 
   def self.fix_title(title, tags)
-    title = remove_bracket_filter(title, tags)
+    title = space_delete(remove_bracket_filter(title, tags))
     title
   end
 
@@ -70,6 +70,14 @@ class Story < ApplicationRecord
 
   def self.bracket_words_2(title)
     (title.scan /【(.*?)】/).flatten
+  end
+
+  # 文字一文字目の空白削除
+  def self.space_delete(title)
+    if (title.first == ' ') || (title.first == '　')
+      title.slice!(0)
+    end
+    title
   end
 
 end
