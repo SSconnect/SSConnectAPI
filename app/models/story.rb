@@ -55,7 +55,7 @@ class Story < ApplicationRecord
   end
 
   def self.fix_title(title, tags)
-    title = remove_bracket_filter(title, tags)
+    title = space_delete(remove_bracket_filter(title, tags))
     title
   end
 
@@ -63,12 +63,21 @@ class Story < ApplicationRecord
     wrong_words = bracket_words_2(title).select { |word| Swing.include? word }
     # Tag check
     tag_words = bracket_words_2(title).select { |word| !ActsAsTaggableOn::Tag.find_by_name(word).nil? }
-    pattern = (wrong_words + tag_words + tags).map { |word| "【#{word}】" }.join('|')
+    my_bracket_words = Bracket.bra_list
+    pattern = (wrong_words + tag_words + tags +my_bracket_words).map { |word| "【#{word}】" }.join('|')
     title.gsub(/#{pattern}/, '')
   end
 
   def self.bracket_words_2(title)
     (title.scan /【(.*?)】/).flatten
+  end
+
+  # 文字一文字目の空白削除
+  def self.space_delete(title)
+    if (title.first == ' ') || (title.first == '　')
+      title.slice!(0)
+    end
+    title
   end
 
 end
