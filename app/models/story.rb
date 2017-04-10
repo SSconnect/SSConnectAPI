@@ -63,7 +63,8 @@ class Story < ApplicationRecord
     wrong_words = bracket_words_2(title).select { |word| Swing.include? word }
     # Tag check
     tag_words = bracket_words_2(title).select { |word| !ActsAsTaggableOn::Tag.find_by_name(word).nil? }
-    pattern = (wrong_words + tag_words + tags).map { |word| "【#{word}】" }.join('|')
+    my_bracket_words = Bracket.bra_list
+    pattern = (wrong_words + tag_words + tags +my_bracket_words).map { |word| "【#{word}】" }.join('|')
     title.gsub(/#{pattern}/, '')
   end
 

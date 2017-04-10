@@ -1,9 +1,22 @@
 class Bracket < ApplicationRecord
-  validates :title, presence: true
+  validates :title, presence: true, uniqueness: true
 
-  def self.br
-    br = '【' + self + '】'
-    br
+  def bra
+    '【' + self.title + '】'
+  end
+
+  def self.bra_list
+    pluck(:title)
+  end
+
+  after_create do
+    stories = Story.where('title LIKE ?', "%#{bra}%")
+    stories.each do |story|
+      title = story.title
+      tags = story.tag_list
+      new_title = Story.fix_title(title,tags)
+      story.rename_title(new_title)
+    end
   end
 
 end
