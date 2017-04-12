@@ -82,6 +82,7 @@ gem 'kaminari'
 
 # grape api
 gem 'grape'
+gem 'grape-entity'
 
 gem 'feedjira'
 

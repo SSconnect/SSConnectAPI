@@ -11,7 +11,7 @@ module V1
         stories = params[:q] == '' ? Story.all : Story.where('title LIKE ?', "%#{params[:q]}%")
         stories = stories.tagged_with(params[:tag]) if params[:tag] != ''
         res = stories.includes(articles: [:blog]).order('first_posted_at DESC').page(params[:page])
-        res
+        present res, with: Entity::StoryEntity
       end
       
       desc 'GET /stories/:id'
