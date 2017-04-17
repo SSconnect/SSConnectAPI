@@ -17,8 +17,8 @@ module V1
         unless params[:story_id].nil?
           articles = Story.find(params[:story_id]).articles
         end
-        res = articles.includes(:blog).order('posted_at DESC').page(params[:page])
-        present res, with: Entity::ArticleEntity
+        @res = articles.includes(:blog).order('posted_at DESC').page(params[:page])
+        present @res, with: Entity::ArticleEntity
       end
       desc 'GET /articles/:id'
       params do
