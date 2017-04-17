@@ -10,10 +10,14 @@ module V1
       get do
         stories = params[:q] == '' ? Story.all : Story.where('title LIKE ?', "%#{params[:q]}%")
         stories = stories.tagged_with(params[:tag]) if params[:tag] != ''
-        res = stories.includes(articles: [:blog]).order('first_posted_at DESC').page(params[:page])
+        res = stories.includes(:tags, {articles: [:blog]}).order('first_posted_at DESC').page(params[:page])
+
+        tags = res.collect {|u| u.tags.collect {|t| t.name}}
+        binding.pry
+        res.zip(tags) {|a| a[0].tag_list = a[1]}
         present res, with: Entity::StoryEntity
       end
-      
+
       desc 'GET /stories/:id'
       params do
         requires :id, type: Integer, desc: 'story id.'
