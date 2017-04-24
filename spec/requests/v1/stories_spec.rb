@@ -21,6 +21,18 @@ describe 'GET /v1/stories' do
       json = JSON.parse(response.body)
       expect(json.size).to eq(25)
     end
+
+    it '正しい構造である' do
+      json = JSON.parse(response.body)
+      story = json.first
+      expect(story[:tag_list]).not_to be_empty
+      expect(story[:title]).not_to be_empty
+      expect(story[:articles]).not_to be_empty
+      expect(story[:articles][0][:blogs]).not_to be_empty
+    end
+
+    it 'ページング情報がついている' do
+    end
   end
 
   describe ' search' do
