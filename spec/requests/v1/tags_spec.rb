@@ -19,8 +19,8 @@ describe 'GET /v1/tags' do
     it '正しい構造である' do
       json = JSON.parse(response.body)
       tag = json.first
-      expect(tag[:name]).not_to be_empty
-      expect(tag[:taggings_count]).not_to be_empty
+      expect(tag['name']).not_to be_nil
+      expect(tag['taggings_count']).not_to be_nil
     end
   end
 end
