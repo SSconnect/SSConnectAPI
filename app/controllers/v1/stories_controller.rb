@@ -1,5 +1,13 @@
 module V1
   class StoriesController < Grape::API
+    after do
+      header "X-Total",       @res.total_count.to_s
+      header "X-Total-Pages", @res.total_pages.to_s
+      header "X-Page",        @res.current_page.to_s
+      header "X-Next-Page",   @res.next_page.to_s
+      header "X-Prev-Page",   @res.prev_page.to_s
+    end
+
     resource :stories do
       desc 'GET /stories'
       params do
