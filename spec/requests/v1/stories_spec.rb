@@ -28,7 +28,10 @@ describe 'GET /v1/stories' do
       expect(story['tag_list']).not_to be_nil
       expect(story['title']).not_to be_nil
       expect(story['articles']).not_to be_nil
-      expect(story['articles'][0]['blog']).not_to be_nil
+      article = story['articles'][0]
+      expect(article['blog']).not_to be_nil
+      expect(article['url']).not_to be_nil
+      expect(article['posted_at']).not_to be_nil
     end
 
     it 'ページング情報がついている' do
