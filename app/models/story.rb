@@ -80,4 +80,8 @@ class Story < ApplicationRecord
     title
   end
 
+  def articles_ordered
+    articles.sort(&:posted_at)
+  end
+
 end
