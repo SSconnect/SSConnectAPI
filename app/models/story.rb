@@ -81,7 +81,7 @@ class Story < ApplicationRecord
   end
 
   def articles_ordered
-    articles.sort(&:posted_at)
+    articles.sort_by {|a| a.posted_at }
   end
 
 end
