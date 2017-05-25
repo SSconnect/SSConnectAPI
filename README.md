@@ -14,3 +14,14 @@ SSをまとめるAPI
 4. bin/rails sample:blog_insert
 5. bin/rails crawl:rss
 6. bin/rails s
+
+
+## test
+
+```
+# main
+rspec
+
+# scraping test
+rspec spec_crawl/models/blog_spec.rb
+```

@@ -28,7 +28,10 @@ describe 'GET /v1/stories' do
       expect(story['tag_list']).not_to be_nil
       expect(story['title']).not_to be_nil
       expect(story['articles']).not_to be_nil
-      expect(story['articles'][0]['blog']).not_to be_nil
+      article = story['articles'][0]
+      expect(article['blog']).not_to be_nil
+      expect(article['url']).not_to be_nil
+      expect(article['posted_at']).not_to be_nil
     end
 
     it 'ページング情報がついている' do
@@ -58,29 +61,47 @@ describe 'GET /v1/stories' do
     it '結果が first_posted_at で sort されている' do
       get '/v1/stories'
       json = JSON.parse(response.body)
-      ids = json.map { |story| story['id'] }
+      ids = json.map {|story| story['id']}
       expect(ids).to eq([2, 1, 3])
     end
 
     it '検索できる' do
       get '/v1/stories', params: {q: 'CCC'}
       json = JSON.parse(response.body)
-      ids = json.map { |story| story['id'] }
+      ids = json.map {|story| story['id']}
       expect(ids).to contain_exactly 2, 3
     end
 
     it 'タグ絞込できる' do
       get '/v1/stories', params: {tag: 'tagA'}
       json = JSON.parse(response.body)
-      ids = json.map { |story| story['id'] }
+      ids = json.map {|story| story['id']}
       expect(ids).to contain_exactly 1, 2
     end
 
     it '空の param を無視する' do
       get '/v1/stories', params: {tag: '', q: ''}
       json = JSON.parse(response.body)
-      ids = json.map { |story| story['id'] }
+      ids = json.map {|story| story['id']}
       expect(ids).to contain_exactly 1, 2, 3
+    end
+  end
+
+  describe ' response structure' do
+    before do
+      story = create(:story)
+      create(:article, :story => story, :posted_at => 3.days.ago)
+      create(:article, :story => story, :posted_at => 1.days.ago)
+      create(:article, :story => story, :posted_at => 4.days.ago)
+      create(:article, :story => story, :posted_at => 2.days.ago)
+      get '/v1/stories'
+    end
+
+    it 'articles が posted_at でソートされている' do
+      json = JSON.parse(response.body)
+      res = json.first['articles'].map { |a| a['id'] }
+      sorted = [3, 1, 4, 2]
+      expect(res).to eq(sorted)
     end
   end
 end

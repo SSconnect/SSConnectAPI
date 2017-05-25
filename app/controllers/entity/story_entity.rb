@@ -4,6 +4,6 @@ module Entity
     expose :title
     expose :first_posted_at
     expose :tag_list
-    expose :articles, using: ArticleEntity
+    expose :articles_ordered, using: ArticleEntity, as: :articles
   end
 end

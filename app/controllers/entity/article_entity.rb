@@ -2,6 +2,7 @@ module Entity
   class ArticleEntity < Grape::Entity
     expose :id
     expose :url
-    expose :blog,using: BlogEntity
+    expose :posted_at
+    expose :blog, using: BlogEntity
   end
 end
