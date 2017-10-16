@@ -87,3 +87,6 @@ gem 'grape-entity'
 gem 'feedjira'
 
 gem 'whenever', :require => false
+
+gem 'rack-cors'
+
