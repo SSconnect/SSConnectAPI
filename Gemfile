@@ -43,6 +43,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'sqlite3'
+  gem 'rails-erd'
 end
 
 group :development do
@@ -89,4 +90,5 @@ gem 'feedjira'
 gem 'whenever', :require => false
 
 gem 'rack-cors'
+
 
