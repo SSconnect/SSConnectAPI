@@ -6,6 +6,10 @@ module V1
       header "X-Page",        @res.current_page.to_s
       header "X-Next-Page",   @res.next_page.to_s
       header "X-Prev-Page",   @res.prev_page.to_s
+
+      header 'Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Total, X-Total-Pages, X-Page, X-Next-Page, X-Prev-Page'
+      header 'Access-Control-Expose-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Total, X-Total-Pages, X-Page, X-Next-Page, X-Prev-Page'
+
     end
 
     resource :stories do
