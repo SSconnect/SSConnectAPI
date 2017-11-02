@@ -12,7 +12,7 @@
 #
 
 class Blog < ApplicationRecord
-  has_many :articles
+  has_many :articles, :dependent => :delete_all
 
   def fetch_rss
     # RSS 未登録はスキップ
@@ -36,7 +36,10 @@ class Blog < ApplicationRecord
     Article.create_with_story_from_entry(self, entry, tags)
   end
 
-  def patch_delete_all
-    # TODO:
+
+
+  after_destroy do
+    Story.left_outer_joins(:articles).where( articles: { id: nil } ).destroy_all()
   end
+
 end
