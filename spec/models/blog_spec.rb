@@ -32,22 +32,22 @@ describe Blog do
       @a3 = create(:article, :story => @storyB, :blog => blogM)
 
       # Bomb!
-      @blogY.patch_delete_all()
+      @blogY.destroy()
     end
 
     it 'ブログ削除が正常に行われた' do
-      expect(@blogY).to be_nil
+      expect(@blogY.destroyed?).to be_truthy
     end
 
     it 'ひもづく Articles が消えている' do
-      expect(@a1).to be_nil
-      expect(@a2).to be_nil
-      expect(@a3).not_to be_nil
+      expect(Article.where(id: @a1.id)).not_to exist
+      expect(Article.where(id: @a2.id)).not_to exist
+      expect(Article.where(id: @a3.id)).to exist
     end
 
     it '消えるべき Story だけ消えている' do
-      expect(@story).to be_nil
-      expect(@storyB).not_to be_nil
+      expect(Story.where(id: @story.id)).not_to exist
+      expect(Story.where(id: @storyB.id)).to exist
     end
   end
 end
