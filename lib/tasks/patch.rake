@@ -7,4 +7,18 @@ namespace :patch do
       p "Remove #{story.title}"
     end
   end
+
+  # ゆるゆりSS速報のarticleを削除
+  task :remove_article_yryr => :environment do
+    blog = Blog.find_by(title: 'ゆるゆり速報')
+    ac = Article.count
+    sc = Story.count
+
+    blog.destroy()
+
+    delete_article_count = ac - Article.count
+    delete_story_count = sc - Story.count
+    p "#{delete_article_count}個のarticleを削除して、"
+    p "#{delete_story_count}個のstoryを削除した"
+  end
 end
