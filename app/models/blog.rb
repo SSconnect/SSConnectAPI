@@ -35,4 +35,8 @@ class Blog < ApplicationRecord
 
     Article.create_with_story_from_entry(self, entry, tags)
   end
+
+  def patch_delete_all
+    # TODO:
+  end
 end
