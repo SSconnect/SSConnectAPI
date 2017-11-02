@@ -44,6 +44,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'sqlite3'
   gem 'rails-erd'
+  gem 'coveralls', require: false
 end
 
 group :development do

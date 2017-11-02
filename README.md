@@ -1,5 +1,4 @@
-# SSConnectAPI
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
+# SSConnectAPI [![Build Status](https://travis-ci.org/SSconnect/SSConnectAPI.svg?branch=master)](https://travis-ci.org/SSconnect/SSConnectAPI) [![Coverage Status](https://coveralls.io/repos/github/SSconnect/SSConnectAPI/badge.svg?branch=master)](https://coveralls.io/github/SSconnect/SSConnectAPI?branch=master) [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
 ## 概要
 SSをまとめるAPI
