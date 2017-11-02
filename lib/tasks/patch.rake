@@ -14,7 +14,7 @@ namespace :patch do
     ac = Article.count
     sc = Story.count
 
-    blog.delete_all()
+    blog.destroy()
 
     delete_article_count = ac - Article.count
     delete_story_count = sc - Story.count

@@ -15,7 +15,7 @@ require 'rails_helper'
 
 describe Blog do
 
-  describe '#patch_delete_all' do
+  describe '#destroy' do
     before do
       blogM = create(:blog_mode_ss)
       @blogY = create(:blog_yryr)
